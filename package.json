@@ -1,0 +1,16 @@
+{
+  "name": "drone",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Maykin Media <info@maykinmedia.nl> (https://www.maykinmedia.nl/)",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^1.1.3",
+    "dualshock": "^2.2.2",
+    "node-bebop": "^0.6.0"
+  }
+}
