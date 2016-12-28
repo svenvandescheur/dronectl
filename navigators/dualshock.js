@@ -16,6 +16,9 @@ const BUTTON_SQUARE = 'square';
 /** {string} representing the button */
 const BUTTON_TRIANGLE = 'triangle';
 
+/** {string} representing the event */
+const POSITION_CHANGED_EVENT = 'PositionChanged';
+
 /** {string} representing the left stick x axis */
 const STICK_LEFT_X = 'lStickX';
 
@@ -47,7 +50,8 @@ const UPDATE_INTERVAL = 30;
  */
 class DualshockNavigator {
   /**
-   * Constructor methoc
+   * Constructor method
+   * @param {Bebop} drone
    */
   constructor(drone) {
     /** {Object} DualShock controller */
@@ -55,6 +59,9 @@ class DualshockNavigator {
 
     /** {Bebop} drone to fly */
     this.drone = drone;
+
+    /** {Object} containing latitude, longitude, altitude */
+    this.position = {}
 
     /** {number} position of the left controler (x axis) */
     this.stickLeftX = STICK_VALUE_CENTER;
@@ -68,7 +75,6 @@ class DualshockNavigator {
     /** {number} position of the right stick (y axis) */
     this.stickRightY = STICK_VALUE_CENTER;
 
-    // Connect
     this.connect();
   }
 
@@ -100,10 +106,14 @@ class DualshockNavigator {
     gamepad.onanalog = this.handleAnalalogControl.bind(this);
     gamepad.ondigital = this.handleDigitalControl.bind(this);
 
+    this.drone.on(POSITION_CHANGED_EVENT, (position) => {
+      this.position = position;
+    });
+
     // Sets a timeout to keep track of control state
     setTimeout(this.checkStickState.bind(this), UPDATE_INTERVAL);
   }
-  
+
   /**
    * Handles all analog input on the DualShock controller
    * @param  {string} control
@@ -236,7 +246,7 @@ class DualshockNavigator {
    */
   getVelocity(value) {
     value = Math.abs(value - 127);
-    return (value <= STICK_TOLERANCE) ? 0 :value / 127 * 100;
+    return (value <= STICK_TOLERANCE) ? 0 : value / 127 * 100;
   }
 }
 
